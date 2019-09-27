@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int distributeCandies(vector<int>& candies) 
+    {
+        map<int, int> candyMap;//candy type, count
+        map<int, int>::iterator it;
+
+        int unique = 0;
+            
+        for(int i = 0; i < candies.size(); i++)
+        {
+            it = candyMap.find(candies[i]);
+            
+            if(it == candyMap.end()) //first time candy appears
+            {
+                candyMap.insert( {candies[i], 1} );
+                unique++;
+                
+                if(unique == candies.size() / 2)
+                    return unique;
+            }
+            
+            else
+            {
+                it->second += 1;
+            }
+        }
+        
+       while(unique > candies.size() / 2)
+           unique--;
+        
+        return unique;
+    }
+};
