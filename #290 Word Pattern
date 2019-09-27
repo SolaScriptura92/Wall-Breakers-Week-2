@@ -1,0 +1,62 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) 
+    {
+        unordered_map<char, string> myMap;
+        unordered_map<string, char> myMapReversed;
+        unordered_map<string, char>::iterator it2;
+        unordered_map<char, string>::iterator it;
+        
+        vector<string> strSplit = stringSplitter(str);
+        
+        if(pattern.size() != strSplit.size())
+            return false;
+        
+        else
+        {
+            for(int i = 0; i < pattern.length(); i++)
+            {
+                it = myMap.find(pattern[i]);
+                it2 = myMapReversed.find(strSplit[i]);
+                
+                if(it == myMap.end())
+                {
+                    if(it2 != myMapReversed.end() && it2->first == strSplit[i] && it2->second != pattern[i])
+                    {
+                        return false;
+                    }
+                    
+                    else
+                    {
+                        myMap.insert( {pattern[i], strSplit[i]} );
+                        myMapReversed.insert( {strSplit[i], pattern[i]} );
+                    }
+                }
+                
+                else if(it->second != strSplit[i] || it2->second != pattern[i])
+                    return false;
+            }
+            
+            return true;
+        }
+        
+    }
+    
+    vector<string> stringSplitter(string s)
+    {
+        s += " ";
+        int start = 0;
+        vector<string> words;
+        
+        for(int i = 0; i < s.length() && start != s.length() - 1; i++)
+        {
+            if(s[i] == ' ')
+            {
+                words.push_back(s.substr(start, i - start));
+                start = i + 1;
+            }
+        }
+        
+        return words;
+    }
+};
