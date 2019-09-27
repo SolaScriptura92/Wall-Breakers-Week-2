@@ -1,0 +1,78 @@
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string A, string B) 
+    {
+        int start = 0;
+        string substring;
+        map<string, int> aMap;
+        map<string, int> bMap;
+        map<string, int>::iterator it;
+        vector<string> uncommon;
+        
+        A += " "; //to get rid of the need for an edge case for end of string
+        B += " "; 
+        
+        for(int i = 0; i < A.length() && start < A.length(); i++)
+        {
+            if(A[i] == ' ')
+            {
+                substring = A.substr(start, i - start);
+                start = i + 1;
+            
+                it = aMap.find(substring);
+            
+                if(it == aMap.end()) //first occurence
+                {
+                    aMap.insert( {substring, 1} );
+                }
+            
+                else
+                {
+                    it->second += 1;
+                }
+            }
+        }
+        
+        start = 0;
+        
+        for(int i = 0; i < B.length() && start < B.length(); i++)
+        {
+            if(B[i] == ' ')
+            {
+                substring = B.substr(start, i - start);
+                start = i + 1;
+            
+                it = bMap.find(substring);
+            
+                if(it == bMap.end()) //first occurence
+                {
+                    bMap.insert( {substring, 1} );
+                }
+            
+                else
+                {
+                    it->second += 1;
+                }
+            }
+        }
+        
+        
+        for(it = aMap.begin(); it != aMap.end(); it++)
+        {
+            if(it->second == 1 && (bMap.find(it->first) == bMap.end()))
+            {
+                uncommon.push_back(it->first);
+            }
+        }
+        
+        for(it = bMap.begin(); it != bMap.end(); it++)
+        {
+            if(it->second == 1 && (aMap.find(it->first) == aMap.end()))
+            {
+                uncommon.push_back(it->first);
+            }
+        }
+        
+        return uncommon;     
+    }
+};
