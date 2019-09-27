@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) 
+    {
+        map<int, int> nums1Map;
+        map<int, int> alreadyOccurred;
+        vector<int> intersectionOfArrays;
+        
+        for(int i = 0; i < nums1.size(); i++) //store nums1 vector into map
+        {
+            nums1Map.insert( {nums1[i], 1} );
+        }
+        
+        for(int j= 0; j < nums2.size(); j++)
+        {
+            if(alreadyOccurred.find(nums2[j]) == alreadyOccurred.end() && nums1Map.find(nums2[j]) != nums1Map.end()) //if hasn't occured and its in nums1 vector
+            {
+                alreadyOccurred.insert( {nums2[j], 1} ); //store because it already occurred
+                intersectionOfArrays.push_back(nums2[j]); //add it to intersection as well
+            }
+        }
+        
+        return intersectionOfArrays;
+    }
+};
