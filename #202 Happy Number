@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isHappy(int n) 
+    {
+        map<int, int> digitsSum;
+        int sumOfDigits = n;
+        
+        while(sumOfDigits != 1)
+        {
+            int newSum = 0;
+            
+            while(sumOfDigits > 9)
+            {
+                int singleDigit = sumOfDigits % 10;
+                newSum += singleDigit * singleDigit;
+                sumOfDigits /= 10;
+            }
+            
+            newSum += sumOfDigits * sumOfDigits;
+            
+            if(digitsSum.find(newSum) != digitsSum.end()) //number has already occured
+            {
+                return false;
+            }
+        
+            digitsSum.insert( {newSum, 1} );
+            sumOfDigits = newSum;
+        }
+        
+        return true;
+    }
+};
