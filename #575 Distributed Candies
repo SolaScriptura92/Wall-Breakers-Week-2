@@ -2,8 +2,8 @@ class Solution {
 public:
     int distributeCandies(vector<int>& candies) 
     {
-        map<int, int> candyMap;//candy type, count
-        map<int, int>::iterator it;
+        unordered_map<int, int> candyMap;//candy type, count
+        unordered_map<int, int>::iterator it;
 
         int unique = 0;
             
