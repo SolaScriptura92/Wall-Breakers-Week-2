@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) 
+    {
+        unordered_map<char, char> sMap;
+        unordered_map<char, int> alreadyTaken;
+        unordered_map<char, char>::iterator it;
+        unordered_map<char, int>::iterator it2;
+        
+        for(int i = 0; i < s.length(); i++)
+        {
+            it = sMap.find(s[i]);
+            
+            if(it == sMap.end())
+            {   
+                it2 = alreadyTaken.find(t[i]);
+                
+                if(it2 == alreadyTaken.end())
+                {
+                    sMap.insert( {s[i], t[i]} );
+                    alreadyTaken.insert( {t[i], 1} );  
+                }
+                
+                else
+                    return false;
+                    
+            }  
+            
+            else
+            {
+                if(it->second != t[i])
+                {
+                  return false;  
+                }       
+            }
+        }
+        
+        return true;
+    }
+};
