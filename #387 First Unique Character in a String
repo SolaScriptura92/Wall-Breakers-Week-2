@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int firstUniqChar(string s) 
+    {
+        vector<vector<int>> v(26, vector<int>(1,0));
+        int maxIndex = 1000000;
+        
+        for(int i = 0; i < s.length(); i++)
+        {
+            v[s[i] - 97].push_back(i);
+        }
+            
+        
+        for(int i = 0; i < v.size(); i++)
+        {   
+            if(v[i].size() == 2)
+            {
+                if(v[i][1] < maxIndex)
+                {
+                    maxIndex = v[i][1];
+                }    
+            }
+        }
+        
+        if(maxIndex == 1000000)
+            return -1;
+        
+        else
+            return maxIndex;
+        
+    }
+};
