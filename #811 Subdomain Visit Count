@@ -1,0 +1,77 @@
+class Solution {
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains) 
+    {
+        multimap<string, int> domains; //will map a domain to all of its strings
+        multimap<string, int>::iterator it;
+        multimap<string, int>::iterator top;
+        multimap<string, int>::iterator bottom;
+        
+        int dotCount = 0;
+        string temp;
+        vector<string> answer;
+        
+        for(int i = 0; i < cpdomains.size(); i++)
+        {
+            //get the number first
+            int m = 0;
+            dotCount = 0;
+            
+            while(isdigit(cpdomains[i][m]))
+            {
+                m++;
+            }
+            
+            int num = stoi(cpdomains[i].substr(0, m));
+            temp = cpdomains[i].substr(m + 1, cpdomains[i].length() - (m + 1));
+            
+            domains.insert( {temp, num} );
+            
+            for(int j = cpdomains[i].length() - 1; j >= 0; j--) //gather each subdomain
+            {
+                if(cpdomains[i][j] == '.')
+                {
+                    dotCount++;
+                    
+                    if(dotCount <= 2)
+                    {
+                        temp = cpdomains[i].substr(j + 1, cpdomains[i].length() -j);
+                        domains.insert( {temp, num} );
+                    }
+                    
+                    if(dotCount > 2 || isdigit(cpdomains[i][j]))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+          
+        int sum = 0;
+        
+        for(it = domains.begin(); it != domains.end(); it++)
+        {
+            bottom = domains.lower_bound(it->first);
+            top = domains.upper_bound(it->first);
+            
+           sum += bottom->second;
+           bottom++;
+            
+            while(bottom != top)
+            {
+                sum += bottom->second;
+                bottom++;
+            }
+            
+            temp = to_string(sum) + " " + it->first;
+            
+            if(find(answer.begin(), answer.end(), temp) == answer.end())
+                answer.push_back(temp);
+            
+            sum = 0;
+        }
+    
+        return answer;
+        
+    }
+};
