@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> findErrorNums(vector<int>& nums) 
+    {
+        unordered_map<int, int> count; //map numbers to the number of their occurrences
+        unordered_map<int, int>::iterator it;
+        vector<int> numbers;
+        
+        int totalSum = 0; //what the sum should be if all the numbers were present
+        int actualSum = 0;
+        
+        for(int j = nums.size(); j > 0; j--) //get total and actual sum
+        {
+            totalSum += j;
+            actualSum += nums[j - 1];
+        }
+        
+        for(int i = 0; i < nums.size(); i++) //insert numbers into map, stop when a number appears twice
+        {
+            it = count.find(nums[i]);
+            
+            if(it != count.end())
+            {
+                numbers.push_back(nums[i]); //store the number that appeared twice
+                break;
+            } 
+            
+            else
+            {
+                count.insert( {nums[i], 1} ); //first occurrence, store the number
+            }
+        }
+        
+        actualSum -= numbers[0]; //the other number that is missing total sum minus the actual sum minus the number that was repeated
+        numbers.push_back(totalSum - actualSum);
+        
+        return numbers;
+    }
+};
