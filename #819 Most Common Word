@@ -1,0 +1,67 @@
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) 
+    {
+        unordered_map<string, int> count;
+        unordered_map<string, int>::iterator it;
+        unordered_map<string, int>::iterator it2;
+        unordered_map<string, int> bannedWords;
+        string temp = "";
+        int start = 0;
+        int frequency = -1;
+        string greatestOccurrence;
+        bool started = true;
+            
+        paragraph += " "; //add space so word paragraph splitting part of the algorithm works correctly
+        
+        for(int i = 0; i < banned.size(); i++) //insert banned words into a map
+        {
+            bannedWords.insert( {banned[i], 1} );
+        }
+        
+        for(int j = 0; j < paragraph.length(); j++)
+        {
+            if(started == false && isalpha(paragraph[j]))
+            {
+                started = true;
+                start = j;
+            }
+            
+            if(!isalpha(paragraph[j]) && started)
+            {
+                temp = paragraph.substr(start, j - start);
+                transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+                started = false;
+                start = j + 1;
+                it = count.find(temp);
+                
+                if(it == count.end())
+                {
+                    it2 = bannedWords.find(temp);
+                    
+                    if(it2 == bannedWords.end())
+                    {
+                        count.insert( {temp, 1} );
+                    }
+                    
+                }
+                
+                else
+                {
+                    it->second++;
+                }
+            }
+        }
+        
+        for(it = count.begin(); it != count.end(); it++)
+        {
+            if(it->second > frequency)
+            {
+                greatestOccurrence = it->first;
+                frequency = it->second;
+            }
+        }
+        
+        return greatestOccurrence;
+    }
+};
