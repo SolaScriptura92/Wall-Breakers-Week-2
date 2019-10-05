@@ -1,0 +1,87 @@
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    Trie* children[26]; //26 node pointers, one for each letter of the alphabet
+    bool isLeaf;
+    Trie* head = NULL;
+    
+    Trie() 
+    {   
+        memset(children, 0 ,sizeof(children));
+        isLeaf = false;
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) 
+    {
+        if(head == NULL)
+        {
+            head = new Trie();
+        }
+        
+        Trie* current = head;
+        int index;
+        
+        for(int i = 0; i < word.length(); i++)
+        {
+            index = word[i] - 97;
+            
+            if(current->children[index] == NULL)
+            {
+                current->children[index] = new Trie();
+            }
+            
+            current = current->children[index];
+        }
+        
+        current->isLeaf = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) 
+    {
+        Trie* current = head;
+        int index;
+        
+        if(head == NULL)
+            return false;
+        
+        for(int i = 0; i < word.length(); i++)
+        {
+            index = word[i] - 97;
+            
+            if(current->children[index] == NULL)
+                return false;
+            
+            current = current->children[index];
+        }
+        
+       if(current->isLeaf)
+            return true;
+        
+        
+        return false;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) 
+    {
+        Trie* current = head;
+        int index;
+        
+        if(head == NULL)
+            return false;
+        
+        for(int i = 0; i < prefix.length(); i++)
+        {
+            index = prefix[i] - 97;
+            
+            if(current->children[index] == NULL)
+                return false;
+            
+            current = current->children[index];
+        }
+        
+        return true;
+    }
+};
