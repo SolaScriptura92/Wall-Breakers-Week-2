@@ -1,0 +1,111 @@
+struct Trie
+{
+    bool isLeaf;
+    Trie* children[26]; //26 to hold all 26 lower case letters of alphabet;
+    Trie* head;
+    int prefixCount;
+    string maxString = "";
+    int depth = 0;
+    
+    
+    void init() //constructor
+    {
+        head = new Trie();
+        head->prefixCount = 0;
+        head->isLeaf = false;
+
+        for(int i = 0; i < 26; i++)
+        {
+          children[i] = new Trie();
+          children[i]->prefixCount = 0;
+          children[i]->isLeaf = false;
+        }
+    }
+    
+    void insert(string w)
+    {
+        Trie* current = head;
+        current->prefixCount++;
+        int numNewNodes = 0;
+        int maxPreCount = -1;
+       
+        if(maxString == "" && w.length() == 1)
+        {
+            maxString = w;
+        }
+            
+    
+        for(int i = 0; i < w.length(); i++)
+        {
+            
+            int charIndex = w[i] - 97;
+       
+            if(current->children[charIndex] == NULL || current->children[charIndex]->prefixCount == 0)
+            {
+              numNewNodes++;
+              current->children[charIndex] = new Trie();
+              current->children[charIndex]->init();
+            }
+              
+            current->children[charIndex]->prefixCount++;
+            
+            if(current->children[charIndex]->prefixCount > maxPreCount)
+            {
+                maxPreCount = current->children[charIndex]->prefixCount;
+            }
+            
+            current = current->children[charIndex];
+        }
+
+        if(numNewNodes == 1 && w.length() >= maxString.length() && (w.length() - maxString.length() < 2) && maxPreCount >= w.length())
+        {
+            if(maxString.length() == w.length() && w < maxString)
+            {
+                maxString = w;
+            }
+            
+            else if(w.length() > maxString.length() && maxString != "")
+            {
+                maxString = w;
+            }     
+        }
+        
+        current->isLeaf = true;
+    }
+    
+    bool search(string w)
+    {
+        Trie* current = head;
+        
+        for(int i = 0; i < w.length(); i++)
+        {
+            int charIndex = w[i] - 97;
+            
+            if(current->children[charIndex] == NULL)
+                return false;
+            
+            current = current->children[charIndex];
+        }
+        
+        return current->isLeaf;
+    }
+
+};
+
+
+class Solution 
+{
+public:
+    string longestWord(vector<string>& words) 
+    {
+        Trie myTrie;
+        myTrie.init();
+        
+        sort(words.begin(), words.end());
+        
+        for(int i = 0; i < words.size(); i++)
+            myTrie.insert(words[i]);
+        
+        return myTrie.maxString;
+    }
+};
