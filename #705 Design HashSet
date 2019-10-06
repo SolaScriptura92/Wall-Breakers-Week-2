@@ -1,0 +1,41 @@
+class MyHashSet {
+public:
+    /** Initialize your data structure here. */
+    vector<int> setStorage;
+    
+    MyHashSet() 
+    {
+        setStorage.push_back(-1);
+    }
+    
+    void add(int key) 
+    {
+        if(key >= setStorage.size() - 1)
+        {
+            while(key >= setStorage.size() - 1)
+                setStorage.push_back(-1);
+        }
+        
+        setStorage[key] = key;
+    }
+    
+    void remove(int key) 
+    {
+        if(key <= setStorage.size() - 1)
+            setStorage[key] = -1;
+    }
+    
+    /** Returns true if this set contains the specified element */
+    bool contains(int key) 
+    {
+        if(key <= setStorage.size() - 1)
+        {
+            if(setStorage[key] != -1)
+                return true;
+            
+            return false;
+        }
+        
+        return false;
+    }
+};
